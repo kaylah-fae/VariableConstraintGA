@@ -25,7 +25,7 @@ population_size = 100
 max_memory = 500 
 
 
-problem_space = LodRunnerProblemSpace()
+problem_space = LodeRunnerProblemSpace()
 cross_over = 0.5 
 mutation = 0.05
 

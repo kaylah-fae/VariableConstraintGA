@@ -85,7 +85,7 @@ class VariableConstraintMapElites(VariableConstraintGA):
 
     def make_room(self):
         '''
-        remove the worst indivual if the 
+        remove the worst individual if the 
         feasible or infeasible population exceeds max capacity 
         '''
 
