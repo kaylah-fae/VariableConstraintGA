@@ -57,7 +57,7 @@ class LodeRunnerInd:
         return self.info
 
 
-class LodRunnerProblemSpace(ProblemSpace): 
+class LodeRunnerProblemSpace(ProblemSpace): 
     """
     To add a problem space to this benchmark, 
     create a class that inherits this class as a 

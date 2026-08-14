@@ -83,6 +83,19 @@ class YouAlgorithm(VariableConstraintGA):
             ind = self.problem_space.generate_random_individual()
             self.place_in_bin(ind)
 
+    def re_shuffle(self):
+        # First get all children from feasible and infeasible pop 
+        all_children = self.infeasibles[:]
+        all_children += [el for li in self.feasibles for el in li]
+        all_children += [el for li in self.con_feasibles for el in li]
+
+        # then re-set all populations 
+        self.set_up()
+
+        #then re-add all children based on new cons 
+        for c in all_children:
+            self.place_in_bin(c[1])
+        
     def run_one_generation(self, made_change): 
         """
         Complete a single generation of the algorithm
@@ -118,7 +131,7 @@ class YouAlgorithm(VariableConstraintGA):
         return self.feasibles
 
     def _calc_max_nums(self):
-        self.max_num_feasible = floor(self.max_memory * self.max_feasible)
+        self.max_num_feasible = floor(self.max_memory * self.max_feasible_rate)
         self.max_num_con_feasible = floor(self.max_memory * self.max_con_feasible_rate)
     
         self.max_feasible_inds_per_bin = floor(self.max_num_feasible / self.problem_space.get_num_bins()) 
@@ -138,12 +151,16 @@ class YouAlgorithm(VariableConstraintGA):
                 bins = self.feasibles
                 max_inds_per_bin = self.max_feasible_inds_per_bin
                 self.num_feasible += 1
+                fitness = self.problem_space.fitness(ind)
             else:
                 # Belongs in the con feasible population
                 self.num_con_feasible += 1
-
-            constraints_sat = 1 - (var_violated/len(self.variable_constraints))
-            fitness = constraints_sat * self.var_constraint_weight + self.problem_space.fitness(ind) * 1 - self.var_constraint_weight
+                if len(self.variable_constraints) == 0:
+                    constraints_sat = 1
+                else:
+                    constraints_sat = 1 - (var_violated/len(self.variable_constraints))
+                fitness = constraints_sat * self.var_constraint_weight + self.problem_space.fitness(ind) * 1 - self.var_constraint_weight
+            
             bins[b].append((fitness, ind))
             self._sort_pop(bins[b])
             while len(bins[b]) > max_inds_per_bin:
@@ -161,6 +178,7 @@ class YouAlgorithm(VariableConstraintGA):
             self.num_infeasible += 1
             while self._total_pop() > self.max_memory:
                 self.infeasibles.pop(-1)
+                self.num_infeasible -= 1
 
     def _constraints_violated(self, ind, constraints):
         constraints_violated = 0 
@@ -181,6 +199,9 @@ class YouAlgorithm(VariableConstraintGA):
     def _total_pop(self):
         return self.num_feasible + self.num_con_feasible + self.num_infeasible
 
+    def _total_infeasible_pop(self):
+        return self.num_con_feasible + self.num_infeasible
+
     def _select_bin(self, bins):
         # randomly select a bin with children 
         bi = random.choice(range(len(bins)))
@@ -195,8 +216,8 @@ class YouAlgorithm(VariableConstraintGA):
         if decide((self.num_feasible * self.select_feasible_weight) / self._total_pop()):
             return self._select_bin(self.feasibles)
         # select from con feasible
-        elif decide((self.num_con_feasible * self.select_con_feasible_weight) / self.num_con_feasible + self.num_infeasible):
+        elif self._total_infeasible_pop() > 0 and decide((self.num_con_feasible * self.select_con_feasible_weight) / self._total_infeasible_pop()):
             return self._select_bin(self.con_feasibles)
         # select from infeasible 
         else:
-            return roulette_selection(self.infeasible_pop)
+            return roulette_selection(self.infeasibles)

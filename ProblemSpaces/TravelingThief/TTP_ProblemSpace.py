@@ -20,9 +20,9 @@ from ProblemSpaces.TravelingThief.Constraints import WeightConstraint, rand_cons
 problems = ["n50_bounded_strongly.ttp", "n50_uncorr_similar.ttp", "n50_uncorr.ttp", "n150_strongly_bounded.ttp", "n150_uncorr_similar.ttp", "n150_uncorr.ttp"]
 
 
-problems = ["../ProblemSpaces/TravelingThief/" + problem for problem in problems]
+problems = ["ProblemSpaces/TravelingThief/" + problem for problem in problems]
 
-nextProblemFile = "../ProblemSpaces/TravelingThief/nextProblem.txt"
+nextProblemFile = "ProblemSpaces/TravelingThief/nextProblem.txt"
 
 class TTPIndivual():
     def __init__(self, params, nodes, items, solution) -> None:

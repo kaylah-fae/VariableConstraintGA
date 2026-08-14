@@ -1,0 +1,92 @@
+{
+    "LodeRunner": {
+        "Exploratory": {
+            "YouAlgorithm": 0.0,
+            "Filtering": 3.22,
+            "Restarts": 0.60,
+            "Shuffling": 2.55,
+            "VC-MAP-Elites": 3.87
+        },
+        "Adaptive": {
+            "YouAlgorithm": 0.0,
+            "Filtering": 5.14,
+            "Restarts": 0.68,
+            "Shuffling": 5.04,
+            "VC-MAP-Elites": 5.51
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 0.0,
+            "Filtering": 2.16,
+            "Restarts": 0.01,
+            "Shuffling": 2.30,
+            "VC-MAP-Elites": 3.11
+        },
+        "Strict": {
+            "YouAlgorithm": 0.0,
+            "Filtering": 0.59,
+            "Restarts": 0.01,
+            "Shuffling": 0.65,
+            "VC-MAP-Elites": 1.11
+        }
+    },
+    "TravelingSalesman": {
+        "Exploratory": {
+            "YouAlgorithm": 20610.30379713543,
+            "Filtering": 20190.45,
+            "Restarts": 15898.77,
+            "Shuffling": 31817.14,
+            "VC-MAP-Elites": 22088.88
+        },
+        "Adaptive": {
+            "YouAlgorithm": 39423.211708456634,
+            "Filtering": 18886.97,
+            "Restarts": 13706.13,
+            "Shuffling": 32373.47,
+            "VC-MAP-Elites": 25489.52
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 32862.9751956593,
+            "Filtering": 12646.84,
+            "Restarts": 14165.74,
+            "Shuffling": 29597.90,
+            "VC-MAP-Elites": 22087.50
+        },
+        "Strict": {
+            "YouAlgorithm": 46125.91291580762,
+            "Filtering": 2612.30,
+            "Restarts": 7499.35,
+            "Shuffling": 25935.51,
+            "VC-MAP-Elites": 19475.88
+        }
+    },
+    "LogicPuzzles": {
+        "Exploratory": {
+            "YouAlgorithm": 0.12666666666666668,
+            "Filtering": 21.8,
+            "Restarts": 30.65,
+            "Shuffling": 33.90,
+            "VC-MAP-Elites": 22.87
+        },
+        "Adaptive": {
+            "YouAlgorithm": 13.68,
+            "Filtering": 17.60,
+            "Restarts": 11.40,
+            "Shuffling": 44.47,
+            "VC-MAP-Elites": 29.55
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 17.8,
+            "Filtering": 0.89,
+            "Restarts": 18.01,
+            "Shuffling": 24.85,
+            "VC-MAP-Elites": 21.89
+        },
+        "Strict": {
+            "YouAlgorithm": 7.173333333333333,
+            "Filtering": 0.43,
+            "Restarts": 6.63,
+            "Shuffling": 10.24,
+            "VC-MAP-Elites": 11.14
+        }
+    }
+}

@@ -1,4 +1,4 @@
-
+import json
 
 from GeneticAlgorithmInterface import VariableConstraintGA
 from Algorithms.VCMapElites import VariableConstraintMapElites
@@ -10,50 +10,74 @@ from Personas.DoNothing import DoNothing
 from Personas.Strict import StrictUser 
 from Personas.Adaptive import AdaptiveUser
 from Personas.TwoForwardOneBack import TwoForOneBackUser
-from ProblemSpaces.LodeRunner.LodeRunnerProblemSpace import LodRunnerProblemSpace
+from ProblemSpaces.LodeRunner.LodeRunnerProblemSpace import LodeRunnerProblemSpace
 from ProblemSpaces.LogicPuzzles.LogicPuzzleSpace import LogicPuzzleSpace 
 from ProblemSpaces.TravelingThief.TTP_ProblemSpace import TTPProblemSpace
+from main import YouAlgorithm
 
 """"
 Run a single experiment and save the results 
 Uncomment out sections of the code to test different problem spaces,users or algorithms 
 """
 
+def test(Algorithm, problem_space_params, User, gen_params):
+    problem_space, space_params = problem_space_params
+    user = User(problem_space)
+    algorithm = Algorithm(problem_space, number_generations=gen_params["number_generations"], population_size=gen_params["population_size"], max_memory=gen_params["max_memory"], cross_over_rate=space_params["cross_over"], mutation_rate=space_params["mutation"],user=user, update_interval=50)
 
-number_generation = 150 
-population_size = 100 
-max_memory = 500 
+    algorithm.run()
+    # algorithm.save_measure_history("test_data")
+    return algorithm.get_avg_qd_score()
+    
 
+if __name__ == "__main__":
 
-problem_space = LodeRunnerProblemSpace()
-cross_over = 0.5 
-mutation = 0.05
+    gen_params = {
+        "number_generations": 150,
+        "population_size": 100, 
+        "max_memory": 500,
+    }
 
+    problem_space_paramss = [
+        ("LodeRunner", (LodeRunnerProblemSpace(), {
+            "cross_over": 0.5,
+            "mutation": 0.05,
+        })),
+        ("TravelingSalesman", (TTPProblemSpace(), {
+            "cross_over": 0.5,
+            "mutation": 0.1,
+        })),
+        ("LogicPuzzles", (LogicPuzzleSpace(), {
+            "cross_over": 0.7,
+            "mutation": 0.5,
+        }))
+    ]
+    Users = [
+        ("Exploratory", ExploratoryUser), 
+        ("Adaptive", AdaptiveUser), 
+        ("TwoForOneBack", TwoForOneBackUser), 
+        ("Strict", StrictUser)
+    ]
+    Algorithms = [
+        # ("Shuffling", Shuffling), 
+        # ("Filtering", Filtering), 
+        # ("RandomRestarts", RandomRestarts), 
+        # ("VariableConstraintMapElites", VariableConstraintMapElites), 
+        ("YouAlgorithm", YouAlgorithm)
+    ]
 
+    results = {}
+    for (pspace_name, problem_space_params) in problem_space_paramss:
+        for (u_name, User) in Users:
+            for (alg_name, Algorithm) in Algorithms:
+                print(f"Running test for {pspace_name}:{u_name}:{alg_name}")
+                qd_score = test(Algorithm, problem_space_params, User, gen_params)
+                print(f"QD Score: {qd_score}")
+                if pspace_name not in results:
+                    results[pspace_name] = {}
+                if u_name not in results[pspace_name]:
+                    results[pspace_name][u_name] = {}
+                results[pspace_name][u_name][alg_name] = qd_score
 
-"""problem_space = LogicPuzzleSpace()
-cross_over = 0.7 
-mutation = 0.5""" 
-
-
-"""problem_space = TTPProblemSpace()
-cross_over = 0.5 
-mutation = 0.1""" 
-
-user = ExploratoryUser(problem_space)
-#user = AdaptiveUser(problem_space)
-#user = TwoForOneBackUser(problem_space)
-#user = StrictUser(problem_space)
-
-
-algorithm = Shuffling(problem_space, number_generations=number_generation, population_size=population_size, max_memory=max_memory, cross_over_rate=cross_over, mutation_rate=mutation,user=user, update_interval=50)
-
-#algorithm = Filtering(problem_space, number_generations=number_generation, population_size=population_size, max_memory=max_memory, cross_over_rate=cross_over, mutation_rate=mutation,user=user, update_interval=50)
-#algorithm = RandomRestarts(problem_space, number_generations=number_generation, population_size=population_size, max_memory=max_memory, cross_over_rate=cross_over, mutation_rate=mutation,user=user, update_interval=50)
-#algorithm = VariableConstraintMapElites(problem_space, number_generations=number_generation, population_size=population_size, max_memory=max_memory, cross_over_rate=cross_over, mutation_rate=mutation,user=user, update_interval=50)
-
-
-algorithm.run()
-
-print("Average QD score: {}".format(algorithm.get_avg_qd_score()))
-algorithm.save_measure_history("test_data")
+    with open(f"test_results.json", "w") as f:
+        json.dump(results, f)
