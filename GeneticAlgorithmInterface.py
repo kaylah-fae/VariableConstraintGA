@@ -22,10 +22,11 @@ def timeout_func(func, args=(), kwargs={}, timeout=30, default=None):
             self.result = default
             self.exc_info = (None, None, None)
         def run(self):
-            try:
-                self.result = func(*args, **kwargs)
-            except Exception as err:
-                self.exc_info = sys.exc_info()
+            self.result = func(*args, **kwargs)
+            # try:
+            #     self.result = func(*args, **kwargs)
+            # except Exception as err:
+            #     self.exc_info = sys.exc_info()
         def suicide(self):
             raise MyTimeoutError(
                 "{0} timeout (taking more than {1} sec)".format(func.__name__, timeout)

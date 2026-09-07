@@ -54,7 +54,6 @@ class YouAlgorithm(VariableConstraintGA):
         We provide the useful functions 
         and values available for you to use here 
         """
-
         
         self.constant_constraints = self.problem_space.get_constant_constraints() # list of static constraints 
         self.max_feasible_rate = 0.5
@@ -111,6 +110,12 @@ class YouAlgorithm(VariableConstraintGA):
         if made_change:
             self.re_shuffle()
 
+        overflow = 0
+        if self.num_infeasible > self.population_size:
+            overflow = self.num_infeasible - self.population_size
+        elites = max(floor(.3 * self.target_infeasible), overflow)
+        self.infeasibles = self.infeasibles[:elites]
+        self.num_infeasible = len(self.infeasibles)
         for _ in range(floor(self.population_size / 2)):
             # select 
             child1 = self._select()[1]
@@ -133,6 +138,7 @@ class YouAlgorithm(VariableConstraintGA):
     def _calc_max_nums(self):
         self.max_num_feasible = floor(self.max_memory * self.max_feasible_rate)
         self.max_num_con_feasible = floor(self.max_memory * self.max_con_feasible_rate)
+        self.target_infeasible = self.max_memory - self.max_num_feasible - self.max_num_con_feasible
     
         self.max_feasible_inds_per_bin = floor(self.max_num_feasible / self.problem_space.get_num_bins()) 
         self.max_con_feasible_inds_per_bin = floor(self.max_num_con_feasible / self.problem_space.get_num_bins())
