@@ -1,1 +1,44 @@
-{"LodeRunner": {"Exploratory": {"YouAlgorithm": 0.0}, "Adaptive": {"YouAlgorithm": 0.1659566295787879}, "TwoForOneBack": {"YouAlgorithm": 0.0}, "Strict": {"YouAlgorithm": 0.0}}, "TravelingSalesman": {"Exploratory": {"YouAlgorithm": 25807.292741523892}, "Adaptive": {"YouAlgorithm": 28626.352669594842}, "TwoForOneBack": {"YouAlgorithm": 30190.19550891667}, "Strict": {"YouAlgorithm": 2334.757523870983}}, "LogicPuzzles": {"Exploratory": {"YouAlgorithm": 25.073333333333334}, "Adaptive": {"YouAlgorithm": 32.9}, "TwoForOneBack": {"YouAlgorithm": 14.933333333333334}, "Strict": {"YouAlgorithm": 0.0}}}
+{
+    "LodeRunner": {
+        "Exploratory": {
+            "YouAlgorithm": 0.0
+        },
+        "Adaptive": {
+            "YouAlgorithm": 0.1659566295787879
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 0.0
+        },
+        "Strict": {
+            "YouAlgorithm": 0.0
+        }
+    },
+    "TravelingSalesman": {
+        "Exploratory": {
+            "YouAlgorithm": 25807.292741523892
+        },
+        "Adaptive": {
+            "YouAlgorithm": 28626.352669594842
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 30190.19550891667
+        },
+        "Strict": {
+            "YouAlgorithm": 2334.757523870983
+        }
+    },
+    "LogicPuzzles": {
+        "Exploratory": {
+            "YouAlgorithm": 25.073333333333334
+        },
+        "Adaptive": {
+            "YouAlgorithm": 32.9
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 14.933333333333334
+        },
+        "Strict": {
+            "YouAlgorithm": 0.0
+        }
+    }
+}

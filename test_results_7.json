@@ -1,0 +1,44 @@
+{
+    "LodeRunner": {
+        "Exploratory": {
+            "YouAlgorithm": 1.0570872307770343
+        },
+        "Adaptive": {
+            "YouAlgorithm": 1.3119229273457804
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 3.879960296428914
+        },
+        "Strict": {
+            "YouAlgorithm": 1.2054429982248427
+        }
+    },
+    "TravelingSalesman": {
+        "Exploratory": {
+            "YouAlgorithm": 14657.632912947727
+        },
+        "Adaptive": {
+            "YouAlgorithm": 12716.985003381984
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 14449.770898291943
+        },
+        "Strict": {
+            "YouAlgorithm": 4041.6229486547304
+        }
+    },
+    "LogicPuzzles": {
+        "Exploratory": {
+            "YouAlgorithm": 38.766666666666666
+        },
+        "Adaptive": {
+            "YouAlgorithm": 38.96
+        },
+        "TwoForOneBack": {
+            "YouAlgorithm": 27.653333333333332
+        },
+        "Strict": {
+            "YouAlgorithm": 0.06
+        }
+    }
+}
