@@ -114,7 +114,7 @@ class YouAlgorithm(VariableConstraintGA):
         overflow = 0
         if self.num_infeasible > self.population_size:
             overflow = self.num_infeasible - self.population_size
-        elites = max(floor(.5 * self.target_infeasible), overflow)
+        elites = max(floor(.3 * self.target_infeasible), overflow)
         self.infeasibles = self.infeasibles[:elites]
         self.num_infeasible = len(self.infeasibles)
         for _ in range(floor(self.population_size / 2)):
@@ -166,7 +166,8 @@ class YouAlgorithm(VariableConstraintGA):
                     constraints_sat = 1
                 else:
                     constraints_sat = 1 - (var_violated/len(self.variable_constraints))
-                fitness = constraints_sat * self.var_constraint_weight + self.problem_space.fitness(ind) * 1 - self.var_constraint_weight
+                prob_fitness = self.problem_space.fitness(ind)
+                fitness = prob_fitness * (1 - self.var_constraint_weight) + prob_fitness * self.var_constraint_weight * constraints_sat
             
             bins[b].append((fitness, ind))
             self._sort_pop(bins[b])
