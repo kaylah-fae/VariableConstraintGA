@@ -98,8 +98,8 @@ if __name__ == "__main__":
                     results[pspace_name][u_name] = {}
                 results[pspace_name][u_name][alg_name] = qd_score
 
-    with open(f"test_results_12.json", "w") as f:
+    with open(f"test_results_14.json", "w") as f:
         json.dump(results, f)
 
-    compare_results(1, 13)
+    compare_results(1, 15)
     

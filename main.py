@@ -128,7 +128,7 @@ class YouAlgorithm(VariableConstraintGA):
         overflow = 0
         if self.num_infeasible > self.population_size:
             overflow = self.num_infeasible - self.population_size
-        elites = max(floor(.6 * self.num_infeasible), overflow)
+        elites = max(floor(.7 * self.num_infeasible), overflow)
         self.infeasibles = self.infeasibles[:elites]
         self.num_infeasible = len(self.infeasibles)
         for _ in range(floor(self.population_size / 2)):
@@ -154,11 +154,11 @@ class YouAlgorithm(VariableConstraintGA):
             child1_stats = self.place_in_bin(child1)
             child2_stats = self.place_in_bin(child2)
 
-            self._update_params(pop1, *child1_stats)
-            self._update_params(pop2, *child2_stats)
-            if crossover:
-                self._update_params(pop2, *child1_stats)
-                self._update_params(pop1, *child2_stats)
+            # self._update_params(pop1, *child1_stats)
+            # self._update_params(pop2, *child2_stats)
+            # if crossover:
+            #     self._update_params(pop2, *child1_stats)
+            #     self._update_params(pop1, *child2_stats)
         
         return self.feasibles
 
