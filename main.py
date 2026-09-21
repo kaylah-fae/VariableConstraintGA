@@ -1,6 +1,7 @@
 from math import floor
 import random
 import numpy.random as npr
+from copy import deepcopy
 
 from GeneticAlgorithmInterface import VariableConstraintGA 
 
@@ -16,6 +17,19 @@ def roulette_selection(population):
     else:
         selection_probs = [(c[0] + add) / m for c in population]
     return population[npr.choice(len(population), p=selection_probs)]
+
+def reverse_roulette_selection(population):
+    small = min([c[0] for c in population]) # make all the fitnesses positive 
+    if small < 0:
+        add = -small 
+    else:
+        add = 0 
+    m = sum([c[0] + add for c in population])
+    if m == 0:
+        selection_probs = [1 / len(population) for _ in population]
+    else:
+        selection_probs = [(c[0] + add) / m for c in population]
+    return population[len(population) - 1 - npr.choice(len(population), p=selection_probs)]
 
 def decide(rate):
     return random.random() < rate
@@ -111,30 +125,68 @@ class YouAlgorithm(VariableConstraintGA):
             self.re_shuffle()
 
         # If there are more infeasibles than the population size, keep the surplus at least (as we can only add at most the population size back, and we want to keep as many individuals in our population as we can.)
-        overflow = 0
-        if self.num_infeasible > self.population_size:
-            overflow = self.num_infeasible - self.population_size
-        elites = max(floor(.3 * self.num_infeasible), overflow)
-        self.infeasibles = self.infeasibles[:elites]
-        self.num_infeasible = len(self.infeasibles)
+        # overflow = 0
+        # if self.num_infeasible > self.population_size:
+        #     overflow = self.num_infeasible - self.population_size
+        # elites = max(floor(.3 * self.num_infeasible), overflow)
+        # self.infeasibles = self.infeasibles[:elites]
+        # self.num_infeasible = len(self.infeasibles)
         for _ in range(floor(self.population_size / 2)):
             # select 
-            child1 = self._select()[1]
-            child2 = self._select()[1]
+            pop1, parent1 = self._select()
+            pop2, parent2 = self._select()
 
+            child1 = deepcopy(parent1[1])
+            child2 = deepcopy(parent2[1])
+
+            crossover = False
             # cross over 
             if decide(self.cross_over_rate):
-                child1, child2 = self.problem_space.cross_over(child1, child2)
+                crossover = True
+                child1, child2 = self.problem_space.cross_over(parent1[1], parent2[1])
             
             # mutate 
             child1 = self.problem_space.mutate(child1, self.mutation_rate)
-            child2 = self.problem_space.mutate(child2, self.mutation_rate)
+            child2 = self.problem_space.mutate(child1, self.mutation_rate)
+
 
             # update population 
-            self.place_in_bin(child1)
-            self.place_in_bin(child2)
+            child1_stats = self.place_in_bin(child1)
+            child2_stats = self.place_in_bin(child2)
+
+            self._update_params(pop1, *child1_stats)
+            self._update_params(pop2, *child2_stats)
+            if crossover:
+                self._update_params(pop2, *child1_stats)
+                self._update_params(pop1, *child2_stats)
         
         return self.feasibles
+
+    def _update_params(self, parent_pop, con_violated, var_violated, fitness):
+        if con_violated == 0:
+            if var_violated == 0:
+                val = .01
+            else:
+                val = .005
+            if parent_pop == "con_feasible":
+                self.select_con_feasible_weight *= (1 + val)
+            elif parent_pop == "var_feasible":
+                self.select_feasible_weight *= (1 + val)
+            else:
+                self.select_con_feasible_weight *= (1 - val)
+                self.select_feasible_weight *= (1 - val) 
+        else:
+            if var_violated == 0:
+                val = .005
+            else:
+                val = .01
+            if parent_pop == "con_feasible":
+                self.select_con_feasible_weight *= (1 - val)
+            elif parent_pop == "var_feasible":
+                self.select_feasible_weight *= (1 - val)
+            else:
+                self.select_con_feasible_weight *= (1 + val)
+                self.select_feasible_weight *= (1 + val)
 
     def _calc_max_nums(self):
         self.max_num_feasible = floor(self.max_memory * self.max_feasible_rate)
@@ -147,6 +199,7 @@ class YouAlgorithm(VariableConstraintGA):
     def place_in_bin(self, ind):
         con_violated = self._con_constraints_violated(ind)
         var_violated = self._var_constraints_violated(ind)
+        fitness = 0
                     
         if con_violated == 0:
             b = self.problem_space.place_in_bin(ind)  
@@ -185,8 +238,10 @@ class YouAlgorithm(VariableConstraintGA):
             self._sort_pop(self.infeasibles)
             self.num_infeasible += 1
             while self._total_pop() > self.max_memory:
-                self.infeasibles.pop(-1)
+                self.infeasibles.remove(reverse_roulette_selection(self.infeasibles))
                 self.num_infeasible -= 1
+
+        return con_violated, var_violated, fitness
 
     def _constraints_violated(self, ind, constraints):
         constraints_violated = 0 
@@ -211,21 +266,22 @@ class YouAlgorithm(VariableConstraintGA):
         return self.num_con_feasible + self.num_infeasible
 
     def _select_bin(self, bins):
-        # randomly select a bin with children 
-        bi = random.choice(range(len(bins)))
-        while len(bins[bi]) == 0:
-            bi = random.choice(range(len(bins))) 
+        # # randomly select a bin with children 
+        # bi = random.choice(range(len(bins)))
+        # while len(bins[bi]) == 0:
+        #     bi = random.choice(range(len(bins))) 
         
+        all_children = [el for bin in bins for el in bin]
         # select from bin using roulette selection 
-        return roulette_selection(bins[bi])
+        return roulette_selection(all_children)
 
     def _select(self):
         # select from feasible 
         if decide((self.num_feasible * self.select_feasible_weight) / self._total_pop()):
-            return self._select_bin(self.feasibles)
+            return "var_feasible", self._select_bin(self.feasibles)
         # select from con feasible
         elif self._total_infeasible_pop() > 0 and decide((self.num_con_feasible * self.select_con_feasible_weight) / self._total_infeasible_pop()):
-            return self._select_bin(self.con_feasibles)
+            return "con_feasible", self._select_bin(self.con_feasibles)
         # select from infeasible 
         else:
-            return roulette_selection(self.infeasibles)
+            return "infeasible", roulette_selection(self.infeasibles)

@@ -28,56 +28,77 @@ def test(Algorithm, problem_space_params, User, gen_params):
     algorithm.run()
     # algorithm.save_measure_history("test_data")
     return algorithm.get_avg_qd_score()
-    
+
+def compare_results(min, max):
+    best = {}
+    for i in range(min, max):
+        results = None
+        with open(f"test_results_{i}.json", "r") as f:
+            results = json.load(f)
+        for pspace, pspace_results in results.items():
+            if pspace not in best:
+                best[pspace] = {}
+            for persona, persona_results in pspace_results.items():
+                if persona not in best[pspace]:
+                    best[pspace][persona] = {}
+                for alg, alg_result in persona_results.items():
+                    if alg not in best[pspace][persona]:
+                        best[pspace][persona][alg] = (-1, -1)
+                    if alg_result > best[pspace][persona][alg][1]:
+                        best[pspace][persona][alg] = (i, alg_result)
+    with open(f"test_results_compare.json", "w") as f:
+        json.dump(best, f)
+        
 
 if __name__ == "__main__":
+    compare_results(1, 12)
 
-    gen_params = {
-        "number_generations": 150,
-        "population_size": 100, 
-        "max_memory": 500,
-    }
+    # gen_params = {
+    #     "number_generations": 150,
+    #     "population_size": 100, 
+    #     "max_memory": 500,
+    # }
 
-    problem_space_paramss = [
-        ("LodeRunner", (LodeRunnerProblemSpace(), {
-            "cross_over": 0.5,
-            "mutation": 0.05,
-        })),
-        ("TravelingSalesman", (TTPProblemSpace(), {
-            "cross_over": 0.5,
-            "mutation": 0.1,
-        })),
-        ("LogicPuzzles", (LogicPuzzleSpace(), {
-            "cross_over": 0.7,
-            "mutation": 0.5,
-        }))
-    ]
-    Users = [
-        ("Exploratory", ExploratoryUser), 
-        ("Adaptive", AdaptiveUser), 
-        ("TwoForOneBack", TwoForOneBackUser), 
-        ("Strict", StrictUser)
-    ]
-    Algorithms = [
-        # ("Shuffling", Shuffling), 
-        # ("Filtering", Filtering), 
-        # ("RandomRestarts", RandomRestarts), 
-        # ("VariableConstraintMapElites", VariableConstraintMapElites), 
-        ("YouAlgorithm", YouAlgorithm)
-    ]
+    # problem_space_paramss = [
+    #     ("LodeRunner", (LodeRunnerProblemSpace(), {
+    #         "cross_over": 0.5,
+    #         "mutation": 0.05,
+    #     })),
+    #     ("TravelingSalesman", (TTPProblemSpace(), {
+    #         "cross_over": 0.5,
+    #         "mutation": 0.1,
+    #     })),
+    #     ("LogicPuzzles", (LogicPuzzleSpace(), {
+    #         "cross_over": 0.7,
+    #         "mutation": 0.5,
+    #     }))
+    # ]
+    # Users = [
+    #     ("Exploratory", ExploratoryUser), 
+    #     ("Adaptive", AdaptiveUser), 
+    #     ("TwoForOneBack", TwoForOneBackUser), 
+    #     ("Strict", StrictUser)
+    # ]
+    # Algorithms = [
+    #     # ("Shuffling", Shuffling), 
+    #     # ("Filtering", Filtering), 
+    #     # ("RandomRestarts", RandomRestarts), 
+    #     # ("VariableConstraintMapElites", VariableConstraintMapElites), 
+    #     ("YouAlgorithm", YouAlgorithm)
+    # ]
 
-    results = {}
-    for (pspace_name, problem_space_params) in problem_space_paramss:
-        for (u_name, User) in Users:
-            for (alg_name, Algorithm) in Algorithms:
-                print(f"Running test for {pspace_name}:{u_name}:{alg_name}")
-                qd_score = test(Algorithm, problem_space_params, User, gen_params)
-                print(f"QD Score: {qd_score}")
-                if pspace_name not in results:
-                    results[pspace_name] = {}
-                if u_name not in results[pspace_name]:
-                    results[pspace_name][u_name] = {}
-                results[pspace_name][u_name][alg_name] = qd_score
+    # results = {}
+    # for (pspace_name, problem_space_params) in problem_space_paramss:
+    #     for (u_name, User) in Users:
+    #         for (alg_name, Algorithm) in Algorithms:
+    #             print(f"Running test for {pspace_name}:{u_name}:{alg_name}")
+    #             qd_score = test(Algorithm, problem_space_params, User, gen_params)
+    #             print(f"QD Score: {qd_score}")
+    #             if pspace_name not in results:
+    #                 results[pspace_name] = {}
+    #             if u_name not in results[pspace_name]:
+    #                 results[pspace_name][u_name] = {}
+    #             results[pspace_name][u_name][alg_name] = qd_score
 
-    with open(f"test_results.json", "w") as f:
-        json.dump(results, f)
+    # with open(f"test_results.json", "w") as f:
+    #     json.dump(results, f)

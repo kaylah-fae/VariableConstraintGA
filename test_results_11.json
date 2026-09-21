@@ -1,13 +1,13 @@
 {
     "LodeRunner": {
         "Exploratory": {
-            "YouAlgorithm": 0.1003670637195256
+            "YouAlgorithm": 0.0
         },
         "Adaptive": {
-            "YouAlgorithm": 3.6949785670386732
+            "YouAlgorithm": 0.0
         },
         "TwoForOneBack": {
-            "YouAlgorithm": 0.5383502060052612
+            "YouAlgorithm": 0.0
         },
         "Strict": {
             "YouAlgorithm": 0.0
@@ -15,30 +15,30 @@
     },
     "TravelingSalesman": {
         "Exploratory": {
-            "YouAlgorithm": 19043.885007488327
+            "YouAlgorithm": 40475.96496069874
         },
         "Adaptive": {
-            "YouAlgorithm": 21470.15139619135
+            "YouAlgorithm": 32695.060283659615
         },
         "TwoForOneBack": {
-            "YouAlgorithm": 24387.099547680096
+            "YouAlgorithm": 34421.406655293766
         },
         "Strict": {
-            "YouAlgorithm": 14831.471244542658
+            "YouAlgorithm": 26679.11120591896
         }
     },
     "LogicPuzzles": {
         "Exploratory": {
-            "YouAlgorithm": 31.926666666666666
+            "YouAlgorithm": 9.006666666666666
         },
         "Adaptive": {
-            "YouAlgorithm": 40.57333333333333
+            "YouAlgorithm": 38.99333333333333
         },
         "TwoForOneBack": {
-            "YouAlgorithm": 33.61333333333334
+            "YouAlgorithm": 14.306666666666667
         },
         "Strict": {
-            "YouAlgorithm": 2.6533333333333333
+            "YouAlgorithm": 13.826666666666666
         }
     }
 }
