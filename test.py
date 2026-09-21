@@ -51,54 +51,55 @@ def compare_results(min, max):
         
 
 if __name__ == "__main__":
-    compare_results(1, 12)
+    gen_params = {
+        "number_generations": 150,
+        "population_size": 100, 
+        "max_memory": 500,
+    }
 
-    # gen_params = {
-    #     "number_generations": 150,
-    #     "population_size": 100, 
-    #     "max_memory": 500,
-    # }
+    problem_space_paramss = [
+        ("LodeRunner", (LodeRunnerProblemSpace(), {
+            "cross_over": 0.5,
+            "mutation": 0.05,
+        })),
+        ("TravelingSalesman", (TTPProblemSpace(), {
+            "cross_over": 0.5,
+            "mutation": 0.1,
+        })),
+        ("LogicPuzzles", (LogicPuzzleSpace(), {
+            "cross_over": 0.7,
+            "mutation": 0.5,
+        }))
+    ]
+    Users = [
+        ("Exploratory", ExploratoryUser), 
+        ("Adaptive", AdaptiveUser), 
+        ("TwoForOneBack", TwoForOneBackUser), 
+        ("Strict", StrictUser)
+    ]
+    Algorithms = [
+        # ("Shuffling", Shuffling), 
+        # ("Filtering", Filtering), 
+        # ("RandomRestarts", RandomRestarts), 
+        # ("VariableConstraintMapElites", VariableConstraintMapElites), 
+        ("YouAlgorithm", YouAlgorithm)
+    ]
 
-    # problem_space_paramss = [
-    #     ("LodeRunner", (LodeRunnerProblemSpace(), {
-    #         "cross_over": 0.5,
-    #         "mutation": 0.05,
-    #     })),
-    #     ("TravelingSalesman", (TTPProblemSpace(), {
-    #         "cross_over": 0.5,
-    #         "mutation": 0.1,
-    #     })),
-    #     ("LogicPuzzles", (LogicPuzzleSpace(), {
-    #         "cross_over": 0.7,
-    #         "mutation": 0.5,
-    #     }))
-    # ]
-    # Users = [
-    #     ("Exploratory", ExploratoryUser), 
-    #     ("Adaptive", AdaptiveUser), 
-    #     ("TwoForOneBack", TwoForOneBackUser), 
-    #     ("Strict", StrictUser)
-    # ]
-    # Algorithms = [
-    #     # ("Shuffling", Shuffling), 
-    #     # ("Filtering", Filtering), 
-    #     # ("RandomRestarts", RandomRestarts), 
-    #     # ("VariableConstraintMapElites", VariableConstraintMapElites), 
-    #     ("YouAlgorithm", YouAlgorithm)
-    # ]
+    results = {}
+    for (pspace_name, problem_space_params) in problem_space_paramss:
+        for (u_name, User) in Users:
+            for (alg_name, Algorithm) in Algorithms:
+                print(f"Running test for {pspace_name}:{u_name}:{alg_name}")
+                qd_score = test(Algorithm, problem_space_params, User, gen_params)
+                print(f"QD Score: {qd_score}")
+                if pspace_name not in results:
+                    results[pspace_name] = {}
+                if u_name not in results[pspace_name]:
+                    results[pspace_name][u_name] = {}
+                results[pspace_name][u_name][alg_name] = qd_score
 
-    # results = {}
-    # for (pspace_name, problem_space_params) in problem_space_paramss:
-    #     for (u_name, User) in Users:
-    #         for (alg_name, Algorithm) in Algorithms:
-    #             print(f"Running test for {pspace_name}:{u_name}:{alg_name}")
-    #             qd_score = test(Algorithm, problem_space_params, User, gen_params)
-    #             print(f"QD Score: {qd_score}")
-    #             if pspace_name not in results:
-    #                 results[pspace_name] = {}
-    #             if u_name not in results[pspace_name]:
-    #                 results[pspace_name][u_name] = {}
-    #             results[pspace_name][u_name][alg_name] = qd_score
+    with open(f"test_results_12.json", "w") as f:
+        json.dump(results, f)
 
-    # with open(f"test_results.json", "w") as f:
-    #     json.dump(results, f)
+    compare_results(1, 13)
+    

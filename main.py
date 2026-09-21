@@ -125,12 +125,12 @@ class YouAlgorithm(VariableConstraintGA):
             self.re_shuffle()
 
         # If there are more infeasibles than the population size, keep the surplus at least (as we can only add at most the population size back, and we want to keep as many individuals in our population as we can.)
-        # overflow = 0
-        # if self.num_infeasible > self.population_size:
-        #     overflow = self.num_infeasible - self.population_size
-        # elites = max(floor(.3 * self.num_infeasible), overflow)
-        # self.infeasibles = self.infeasibles[:elites]
-        # self.num_infeasible = len(self.infeasibles)
+        overflow = 0
+        if self.num_infeasible > self.population_size:
+            overflow = self.num_infeasible - self.population_size
+        elites = max(floor(.3 * self.num_infeasible), overflow)
+        self.infeasibles = self.infeasibles[:elites]
+        self.num_infeasible = len(self.infeasibles)
         for _ in range(floor(self.population_size / 2)):
             # select 
             pop1, parent1 = self._select()
