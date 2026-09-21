@@ -111,13 +111,14 @@ class VCTriPop(VariableConstraintGA):
         all_children += [el for li in self.con_feasibles for el in li]
 
         # then re-set all populations 
-        self.feasibles = []
-        self.con_feasibles = []
-        self.infeasibles = [] 
+        self.set_up()
+        # self.feasibles = []
+        # self.con_feasibles = []
+        # self.infeasibles = [] 
 
-        self.num_feasible = 0 
-        self.num_con_feasible = 0
-        self.num_infeasible = 0  
+        # self.num_feasible = 0 
+        # self.num_con_feasible = 0
+        # self.num_infeasible = 0  
 
         #then re-add all children based on new cons 
         for c in all_children:
