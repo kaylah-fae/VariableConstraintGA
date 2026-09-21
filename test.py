@@ -13,7 +13,7 @@ from Personas.TwoForwardOneBack import TwoForOneBackUser
 from ProblemSpaces.LodeRunner.LodeRunnerProblemSpace import LodeRunnerProblemSpace
 from ProblemSpaces.LogicPuzzles.LogicPuzzleSpace import LogicPuzzleSpace 
 from ProblemSpaces.TravelingThief.TTP_ProblemSpace import TTPProblemSpace
-from main import YouAlgorithm
+from main import VCTriPop
 
 """"
 Run a single experiment and save the results 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
         # ("Filtering", Filtering), 
         # ("RandomRestarts", RandomRestarts), 
         # ("VariableConstraintMapElites", VariableConstraintMapElites), 
-        ("YouAlgorithm", YouAlgorithm)
+        ("VCTriPop", VCTriPop)
     ]
 
     results = {}
@@ -98,7 +98,7 @@ if __name__ == "__main__":
                     results[pspace_name][u_name] = {}
                 results[pspace_name][u_name][alg_name] = qd_score
 
-    with open(f"test_results_15.json", "w") as f:
+    with open(f"test_results_16.json", "w") as f:
         json.dump(results, f)
 
     # compare_results(1, 16)
