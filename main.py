@@ -128,7 +128,7 @@ class YouAlgorithm(VariableConstraintGA):
         overflow = 0
         if self.num_infeasible > self.population_size:
             overflow = self.num_infeasible - self.population_size
-        elites = max(floor(.3 * self.num_infeasible), overflow)
+        elites = max(floor(.6 * self.num_infeasible), overflow)
         self.infeasibles = self.infeasibles[:elites]
         self.num_infeasible = len(self.infeasibles)
         for _ in range(floor(self.population_size / 2)):
