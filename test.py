@@ -101,5 +101,5 @@ if __name__ == "__main__":
     with open(f"test_results_15.json", "w") as f:
         json.dump(results, f)
 
-    compare_results(1, 16)
+    # compare_results(1, 16)
     
