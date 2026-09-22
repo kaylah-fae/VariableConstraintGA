@@ -86,6 +86,15 @@ class VCTriPop(VariableConstraintGA):
 
         self._calc_max_nums()
 
+        self._init_pops()
+        
+        # generate initial population 
+        if self._total_pop() == 0:
+            for _ in range(self.population_size):
+                ind = self.problem_space.generate_random_individual()
+                self.place_in_bin(ind)
+
+    def _init_pops(self):
         self.feasibles = []
         self.con_feasibles = []
         self.infeasibles = [] 
@@ -97,12 +106,6 @@ class VCTriPop(VariableConstraintGA):
         for _ in range(self.problem_space.get_num_bins()):
             self.feasibles.append([])
             self.con_feasibles.append([])
-        
-        # generate initial population 
-        if self._total_pop() == 0:
-            for _ in range(self.population_size):
-                ind = self.problem_space.generate_random_individual()
-                self.place_in_bin(ind)
 
     def re_shuffle(self):
         # First get all children from feasible and infeasible pop 
@@ -112,13 +115,6 @@ class VCTriPop(VariableConstraintGA):
 
         # then re-set all populations 
         self.set_up()
-        # self.feasibles = []
-        # self.con_feasibles = []
-        # self.infeasibles = [] 
-
-        # self.num_feasible = 0 
-        # self.num_con_feasible = 0
-        # self.num_infeasible = 0  
 
         #then re-add all children based on new cons 
         for c in all_children:

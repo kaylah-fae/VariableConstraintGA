@@ -1,3 +1,13 @@
+# VCTriPop
+VCTriPop is a variation of VC-MAP-Elites that maintains three populations:
+* Feasible (all constraints satisfied)
+* Infeasible (static constraints not satisfied)
+* Con Feasible (all static constraints satisfied; not all variable constraints satisfied)
+
+To utilize memory, the infeasible population is permitted to grow until the feasible and constant constraint feasible populations fill their target memory allowance.
+
+A full description of this algorithm is given in VCTriPop_Submission.pdf
+
 # The QDA-VC Competition
 
 
